@@ -5,16 +5,16 @@
 # 2019
 case $1 in
         hosts)
-                status=$(pcs status | grep OFFLINE)
+                status=$(/usr/sbin/pcs status | grep OFFLINE)
                 if [[ $status == *"OFFLINE"* ]]
                 then
-                        echo $status| sed -e "s/:/,/" -e "s/ \[ //g" -e "s/\]//g"
+                        echo $status| sed -e "s/:/|/" -e "s/ \[ //g" -e "s/\]//g"
                 else
-                        pcs status | grep Online | sed -e "s/:/,/" -e "s/ \[ //g" -e "s/\]//g"
+                        /usr/sbin/pcs status | grep Online | sed -e "s/:/|/" -e "s/ \[ //g" -e "s/\]//g"
                 fi
                 ;;
         resources)
-                pcs status | grep -e "Started" -e  "Stopped" | awk '{ print $1","$3","$4}'
+                /usr/sbin/pcs status | grep -e "Started" -e  "Stopped" | awk '{ print $1"|"$3"|"$4}'
                 ;;
         *) echo "This script check pcs status and parse to get:"
            echo "Use hosts to get the state of the hosts of cluster"
